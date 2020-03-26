@@ -3,8 +3,6 @@ package com.revature.service;
 import java.util.List;
 
 import com.revature.domain.Message;
-import com.revature.domain.Project;
-import com.revature.domain.User;
 
 public interface MessageService {
 	
@@ -12,8 +10,14 @@ public interface MessageService {
 	
 	public Message getMessageById(Long id);
 	
-	public List<Message> getMessagesByProject(Project project);
+	public List<Message> getMessagesByProjectIn(Long id);
 	
-	public List<Message> getMessagesByUser(User user);
+	public List<Message> getMessagesByUsername(String username);
+
+	public void deleteMessage(Long id);
+
+	public void updateMessage(Message message);
+
+	public List<Message> getAllMessages();
 
 }

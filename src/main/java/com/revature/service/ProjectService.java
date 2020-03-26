@@ -11,4 +11,12 @@ public interface ProjectService {
 	
 	public List<Project> getProjectsByUser(User user);
 
+	public List<Project> getAllProjects();
+
+	public void updateProject(Project project);
+
+	public void deleteProject(Long id);
+
+	public void insertProject(Project project);
+
 }

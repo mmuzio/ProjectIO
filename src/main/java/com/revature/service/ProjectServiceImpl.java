@@ -28,12 +28,42 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Override
 	public Project getProjectById(Long id) {
+		
 		return projectRepository.getOne(id);
+		
 	}
 
 	@Override
 	public List<Project> getProjectsByUser(User user) {
 		return null;
+	}
+
+	@Override
+	public List<Project> getAllProjects() {
+		
+		return projectRepository.findAll();
+		
+	}
+
+	@Override
+	public void updateProject(Project project) {
+		
+		projectRepository.save(project);
+		
+	}
+
+	@Override
+	public void deleteProject(Long id) {
+		
+		projectRepository.deleteById(id);
+		
+	}
+
+	@Override
+	public void insertProject(Project project) {
+		
+		projectRepository.save(project);
+		
 	}
 
 }

@@ -39,24 +39,29 @@ public class MessageController {
 		return messageService.getAllMessages();
 	}
 	
-//	@GetMapping(path = "/car/user/{username}")
-//	public List<Car> getCarsByOwner(@PathVariable String username) {
-//		return carService.getCarsByOwner(username);
-//	}
+	@GetMapping(path = "/message/user/{username}")
+	public List<Message> getMessagesByMessageSender(@PathVariable String username) {
+		return messageService.getMessagesByUsername(username);
+	}
+	
+	@GetMapping(path = "/message/project/{id}")
+	public List<Message> getMessagesByProjectIn(@PathVariable Long id) {
+		return messageService.getMessagesByProjectIn(id);
+	}
 	
 	@PutMapping(path = "/message")
-	public void updateCar(@RequestBody Message message) {
+	public void updateMessage(@RequestBody Message message) {
 		messageService.updateMessage(message);
 	}
 	
 	@DeleteMapping(path = "/message/{id}")
-	public void deleteCar(@PathVariable Long id) {
+	public void deleteMessage(@PathVariable Long id) {
 		messageService.deleteMessage(id);
 	}
 
 	@PostMapping(path = "/message", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<HttpStatus> addCar(@RequestBody Message message) {
+	public ResponseEntity<HttpStatus> addMessage(@RequestBody Message message) {
 		messageService.insertMessage(message);
 		return new ResponseEntity<HttpStatus>(HttpStatus.CREATED);
 	}
