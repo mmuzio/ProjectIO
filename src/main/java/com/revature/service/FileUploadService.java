@@ -8,9 +8,11 @@ import java.time.Instant;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.HttpMethod;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
@@ -18,6 +20,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.revature.domain.ProfileImage;
 import com.revature.exception.FileUploadServiceException;
 
+@Service
 public class FileUploadService {
 
 	@Autowired
@@ -33,10 +36,12 @@ public class FileUploadService {
 	 * @return
 	 * @throws IOException
 	 */
-	public ProfileImage saveFileToS3(MultipartFile multipartFile) throws FileUploadServiceException {
+	public ProfileImage saveFileToS3(MultipartFile multipartFile) throws IOException {
 
 		try{
+			
 			File fileToUpload = convertFromMultiPart(multipartFile);
+			
 			String key = Instant.now().getEpochSecond() + "_" + fileToUpload.getName();
 
 			/* save file */
@@ -45,15 +50,17 @@ public class FileUploadService {
 			/* get signed URL (valid for one year) */
 			GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(S3_BUCKET_NAME, key);
 			generatePresignedUrlRequest.setMethod(HttpMethod.GET);
-			generatePresignedUrlRequest.setExpiration(DateTime.now().plusYears(1).toDate());
+			generatePresignedUrlRequest.setExpiration(DateTime.now().plusDays(6).toDate());
 
 			URL signedUrl = s3Client.generatePresignedUrl(generatePresignedUrlRequest); 
 
 			return new ProfileImage(key, signedUrl.toString());
-		}
-		catch(Exception ex){			
+			
+		} catch(Exception ex){		
+			
 			throw new FileUploadServiceException("An error occurred saving file to S3", ex);
-		}		
+		}
+			
 	}
 
 	/**

@@ -1,15 +1,11 @@
 package com.revature.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -17,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
-@Table(name="user")
+@Table(name="users")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "username")
 public class User {
 	
@@ -43,8 +39,8 @@ public class User {
 	@OneToOne(cascade = {CascadeType.ALL})
 	private Address address;
 	
-	@OneToMany(mappedBy = "messageSender", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = Message.class)
-	private List<Message> messages = new ArrayList<Message>();
+//	@OneToMany(mappedBy = "messageSender", fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = Message.class)
+//	private List<Message> messages = new ArrayList<Message>();
 	
 	public User(){}
 	
@@ -69,20 +65,20 @@ public class User {
 		this.address = address;
 	}
 	
-	public User(String username, String password, String firstName, String lastName, Date dateOfBirth,
-			ProfileImage profileImage, Address address, List<Message> messages) {
-		
-		super();
-		this.username = username;
-		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.dateOfBirth = dateOfBirth;
-		this.profileImage = profileImage;
-		this.address = address;
-		this.messages = messages;
-		
-	}
+//	public User(String username, String password, String firstName, String lastName, Date dateOfBirth,
+//			ProfileImage profileImage, Address address, List<Message> messages) {
+//		
+//		super();
+//		this.username = username;
+//		this.password = password;
+//		this.firstName = firstName;
+//		this.lastName = lastName;
+//		this.dateOfBirth = dateOfBirth;
+//		this.profileImage = profileImage;
+//		this.address = address;
+//		this.messages = messages;
+//		
+//	}
 
 	public String getUsername() {
 		return username;
@@ -140,12 +136,12 @@ public class User {
 		this.address = address;
 	}
 
-	public List<Message> getMessages() {
-		return messages;
-	}
-
-	public void setMessages(List<Message> messages) {
-		this.messages = messages;
-	}
+//	public List<Message> getMessages() {
+//		return messages;
+//	}
+//
+//	public void setMessages(List<Message> messages) {
+//		this.messages = messages;
+//	}
 
 }

@@ -25,10 +25,10 @@ public class Message {
 	@Column(length = 100)
 	private String messageBody;
 	
-	@ManyToOne
-	@JoinColumn(name="messageSender")
-	@JsonIdentityReference(alwaysAsId = true)
-	private User messageSender;
+//	@ManyToOne
+//	@JoinColumn(name="messageSender")
+//	@JsonIdentityReference(alwaysAsId = true)
+//	private User messageSender;
 	
 //	@Column
 //	private boolean isImage;
@@ -46,13 +46,13 @@ public class Message {
 		this.messageBody = messageBody;
 	}
 
-	public User getMessageSender() {
-		return messageSender;
-	}
-
-	public void setMessageSender(User messageSender) {
-		this.messageSender = messageSender;
-	}
+//	public User getMessageSender() {
+//		return messageSender;
+//	}
+//
+//	public void setMessageSender(User messageSender) {
+//		this.messageSender = messageSender;
+//	}
 
 	public Project getProjectIn() {
 		return projectIn;

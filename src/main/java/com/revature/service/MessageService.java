@@ -8,6 +8,8 @@ import com.revature.domain.User;
 
 public interface MessageService {
 	
+	public void insertMessage(Message message);
+	
 	public Message getMessageById(Long id);
 	
 	public List<Message> getMessagesByProject(Project project);

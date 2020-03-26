@@ -3,11 +3,13 @@ package com.revature.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.revature.domain.Project;
 import com.revature.domain.User;
 import com.revature.repository.UserRepository;
 
+@Service
 public class UserServiceImpl implements UserService {
 	
 	private UserRepository userRepository;
@@ -31,6 +33,11 @@ public class UserServiceImpl implements UserService {
 	public List<User> getUsersByProject(Project project) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean doesUserExist(String username) {
+		return userRepository.existsById(username);
 	}
 
 }
