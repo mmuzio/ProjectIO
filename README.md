@@ -13,8 +13,10 @@ Run on localhost with the following steps:
     - java -Dspring.application.json='{"database-name": "**1**","db-instance-identifier": "**2**","rdsPassword": "**3**","accessKey": "**4**","secretKey": "**5**"}' -jar target/SPMR-0.0.1-SNAPSHOT.jar
 
 You can inspect the api documentation using Swagger. To do this you must:
-    -run the application using the previous steps
-    -navigate to http://localhost:8080/swagger-ui.html#/
+
+1. Run the application using the previous steps
+
+2. navigate to http://localhost:8080/swagger-ui.html#/
 
 SPMR has 3 primary functionalities:
 
