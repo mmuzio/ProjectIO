@@ -10,7 +10,7 @@ public interface MessageService {
 	
 	public Message getMessageById(Long id);
 	
-	public List<Message> getMessagesByProjectIn(Long id);
+	public List<Message> getMessagesByProject(Long id);
 	
 	public List<Message> getMessagesByUsername(String username);
 

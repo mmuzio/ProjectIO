@@ -1,24 +1,22 @@
 package com.revature.controller;
 
 import java.io.IOException;
-import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.revature.domain.Address;
-import com.revature.domain.ProfileImage;
+import com.revature.domain.Auth;
 import com.revature.domain.User;
-import com.revature.service.FileUploadService;
 import com.revature.service.UserService;
 
+@CrossOrigin("*")
 @RestController
 public class LoginController {
 	
@@ -29,23 +27,40 @@ public class LoginController {
 		this.userService = userService;
 	}
 	
-	private FileUploadService fileUploadService;
-	
-	@Autowired
-	public void setFileUploadService(FileUploadService fileUploadService) {
-		this.fileUploadService = fileUploadService;
-	}
+//	private FileUploadService fileUploadService;
+//	
+//	@Autowired
+//	public void setFileUploadService(FileUploadService fileUploadService) {
+//		this.fileUploadService = fileUploadService;
+//	}
 	
 	@PostMapping(value = "/login")
-    public @ResponseBody User loginUser(            
-            @RequestParam(value="username", required=true) String username,
-            @RequestParam(value="password", required=true) String password) {
+    public @ResponseBody User loginUser(@RequestBody Auth auth, HttpServletRequest request) 
+	{          
+//            @RequestParam(value="username", required=true) String username,
+//            @RequestParam(value="password", required=true) String password
+    	
+    		String username = auth.getUsername();
+    		
+    		String password = auth.getPassword();
 		
 			User user = userService.getUserByUsername(username);
-			//Optional<User> user = userRepository.findById(username);
+			
+			System.out.println("user is ...");
+			
+			System.out.println(user.getUsername());
+			
+			System.out.println(user.getPassword());
+			
+			System.out.println(user.getFirstName());
+			
 			if (user != null) {
-				//User newUser = user.get();
+				
 				if (user.getPassword().equals(password)) {
+					
+					HttpSession sess = request.getSession(true);
+					
+					sess.setAttribute("user", user);
 					
 					return user;
 					
@@ -58,17 +73,28 @@ public class LoginController {
     }
 	
 	@PostMapping(value = "/register")
-    public @ResponseBody void createUser(
-    		@RequestParam(value="username", required=true) String username,
-    		@RequestParam(value="password", required=true) String password,
-            @RequestParam(value="firstName", required=true) String firstName,
-            @RequestParam(value="lastName", required=true) String lastName,
-            @RequestParam(value="dateOfBirth", required=true) @DateTimeFormat(pattern="yyyy-MM-dd") Date dateOfBirth,
-            @RequestParam(value="street", required=true) String street,
-            @RequestParam(value="town", required=true) String town,
-            @RequestParam(value="county", required=true) String county,
-            @RequestParam(value="postcode", required=true) String postcode,
-            @RequestParam(value="image", required=true) MultipartFile image) throws IOException {
+    public @ResponseBody void createUser(@RequestBody User user)
+//    		@RequestParam(value="username", required=true) String username,
+//    		@RequestParam(value="password", required=true) String password,
+//            @RequestParam(value="firstName", required=true) String firstName,
+//            @RequestParam(value="lastName", required=true) String lastName,
+//            @RequestParam(value="dateOfBirth", required=true) @DateTimeFormat(pattern="yyyy-MM-dd") Date dateOfBirth,
+//            @RequestParam(value="email", required=true) String email
+//             @RequestParam(value="image", required=true) MultipartFile image
+    		
+             throws IOException {
+		
+		String username = user.getUsername();
+		
+		System.out.println(username);
+		
+//		System.out.println(password);
+//		
+//		System.out.println(firstName);
+//		
+//		System.out.println(lastName);
+//		
+//		System.out.println(dateOfBirth);
 		
 		if (userService.doesUserExist(username)) {
 			
@@ -78,12 +104,12 @@ public class LoginController {
 			
 		} else {
 			
-			ProfileImage profileImage = fileUploadService.saveFileToS3(image);
+			//ProfileImage profileImage = fileUploadService.saveFileToS3(image);
     		
-    		User newUser = new User(username, password, firstName, lastName, dateOfBirth, profileImage, 
-					new Address(street, town, county, postcode));
+//    		User newUser = new User(username, password, firstName, lastName,
+//    				dateOfBirth, email);
     		
-    		userService.registerUser(newUser);
+    		userService.registerUser(user);
 			
 		}
         		

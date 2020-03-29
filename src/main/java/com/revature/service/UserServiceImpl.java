@@ -31,13 +31,21 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> getUsersByProject(Project project) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return project.getUsers();
+		
 	}
 
 	@Override
 	public boolean doesUserExist(String username) {
 		return userRepository.existsById(username);
+	}
+
+	@Override
+	public List<User> getAll() {
+		
+		return userRepository.findAll();
+		
 	}
 
 }

@@ -42,7 +42,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public List<Message> getMessagesByProjectIn(Long id) {
+	public List<Message> getMessagesByProject(Long id) {
 		return projectRepository.getOne(id).getMessages();
 	}
 

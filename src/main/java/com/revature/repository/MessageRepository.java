@@ -8,4 +8,6 @@ import com.revature.domain.Message;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
+	
+	
 }

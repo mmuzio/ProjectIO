@@ -1,8 +1,7 @@
 package com.revature.domain;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,76 +17,112 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="project")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Project {
 	
 	public Project() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public Project(long id, String description, List<Message> messages, Set<User> users) {
+	public Project(long id, String pname, String description,
+		List<Message> messages, List<User> users) {
+	
 		super();
 		this.id = id;
+		this.pname = pname;
 		this.description = description;
 		this.messages = messages;
 		this.users = users;
+	}
+	
+	public Project(long id, String pname, String description) {
+	
+		super();
+		this.id = id;
+		this.pname = pname;
+		this.description = description;
+	}
+	
+	public Project(String pname, String description) {
+		
+		super();
+		this.pname = pname;
+		this.description = description;
 	}
 	
 	@JsonCreator
-	public Project(@JsonProperty("id") int id, String description, List<Message> messages, Set<User> users) {
+	public Project(@JsonProperty("id") int id, String pname, String description) {
+	
 		super();
 		Long newId = Long.valueOf(id);
 	    this.id = newId;
+	    this.pname = pname;
 		this.description = description;
-		this.messages = messages;
-		this.users = users;
 	}
 	
-	public Project(String description, List<Message> messages, Set<User> users) {
+	public Project(String pname, String description, List<Message> messages, 
+			List<User> users) {
+	
 		super();
+		this.pname = pname;
 		this.description = description;
 		this.messages = messages;
 		this.users = users;
 	}
-	
-//	@JsonCreator
-//	public Project (@JsonProperty("id") int id ) {
-//		Long newId = Long.valueOf(id);
-//	    this.id = newId;
-//	}
 
 	@Id
+	@Column(name="project_id")
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
+	
+	@Column(length = 20)
+	private String pname;
 	
 	@Column(length = 100)
 	private String description;
 	
-	@OneToMany(mappedBy = "projectIn", fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Message.class)
-	@JsonManagedReference(value="project-reference")
-	//@JsonIgnore
+	@OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private List<Message> messages;
-	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(
+    
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@JoinTable(
             name = "Project_Users",
             joinColumns = {@JoinColumn(name = "project_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
-    private Set<User> users = new HashSet<>();
+	@JsonIgnore
+    private List<User> users = new ArrayList<User>();
 	
-	public Set<User> getUsers() {
+	public List<User> getUsers() {
 		
         return users;
         
     }
+	
+	public void addUser(User user) {
+		
+		this.users.add(user);
+		
+	}
+	
+	public void setUsers(List<User> users) {
+		
+        this.users = users;
+        
+    }
+
+	public String getPname() {
+		return pname;
+	}
+
+	public void setPname(String pname) {
+		this.pname = pname;
+	}
 
 	public String getDescription() {
 		return description;

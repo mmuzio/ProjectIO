@@ -2,17 +2,16 @@ package com.revature.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -26,49 +25,62 @@ public class Message {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Message(long id, String messageBody, User messageSender, Project projectIn) {
+	public Message(long id, String messageBody,
+			User messageSender, Project project) {
+	
 		super();
 		this.id = id;
 		this.messageBody = messageBody;
 		this.messageSender = messageSender;
-		this.projectIn = projectIn;
+		this.project = project;
 	}
 	
 	@JsonCreator
-	public Message(@JsonProperty("id") int id, String messageBody, User messageSender, Project projectIn) {
+	public Message(@JsonProperty("id") int id, String messageBody,
+		 User messageSender, Project project) {
+	
 		super();
 		Long newId = Long.valueOf(id);
 	    this.id = newId;
 		this.messageBody = messageBody;
 		this.messageSender = messageSender;
-		this.projectIn = projectIn;
+		this.project = project;
 	}
 
-	public Message(String messageBody, User messageSender, Project projectIn) {
+	public Message(String messageBody, Project project, 
+			User messageSender, Project projectIn) {
 		super();
 		this.messageBody = messageBody;
 		this.messageSender = messageSender;
-		this.projectIn = projectIn;
+		this.project = project;
 	}
 
 	@Id
+	@Column(name="message_id")
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
 	
-	@Column(length = 100)
+	@Column(name = "message_text", length = 100)
 	private String messageBody;
 	
-	@ManyToOne
-	@JoinColumn(name="messageSender")
-	@JsonIdentityReference(alwaysAsId = true)
-	@JsonBackReference(value="user-reference")
-	private User messageSender;
+//	@ManyToOne
+//	@JoinColumn(name="messageSender")
+//	@JsonIdentityReference(alwaysAsId = true)
+//	@JsonBackReference(value="user-reference")
+//	private User messageSender;
+//	
+//	@ManyToOne
+//	@JoinColumn(name="projectIn")
+//	@JsonIdentityReference(alwaysAsId = true)
+//	@JsonBackReference(value="project-reference")
 	
-	@ManyToOne
-	@JoinColumn(name="projectIn")
-	@JsonIdentityReference(alwaysAsId = true)
-	@JsonBackReference(value="project-reference")
-	private Project projectIn;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	private Project project;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	private User messageSender;
 
 	public String getMessageBody() {
 		return messageBody;
@@ -86,12 +98,12 @@ public class Message {
 		this.messageSender = messageSender;
 	}
 
-	public Project getProjectIn() {
-		return projectIn;
+	public Project getProject() {
+		return project;
 	}
 
-	public void setProjectIn(Project projectIn) {
-		this.projectIn = projectIn;
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	public long getId() {

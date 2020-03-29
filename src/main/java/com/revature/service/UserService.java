@@ -15,4 +15,6 @@ public interface UserService {
 	
 	public List<User> getUsersByProject(Project project);
 	
+	public List<User> getAll();
+	
 }

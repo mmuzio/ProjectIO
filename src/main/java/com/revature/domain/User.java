@@ -2,9 +2,7 @@ package com.revature.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,11 +11,10 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
@@ -41,55 +38,57 @@ public class User {
 	@Column(nullable = false)
 	private Date dateOfBirth;
 	
-	@OneToOne(cascade = {CascadeType.ALL})
-	private ProfileImage profileImage;
+//	@OneToOne(cascade = {CascadeType.ALL})
+//	private ProfileImage profileImage;
 	
-	@OneToOne(cascade = {CascadeType.ALL})
-	private Address address;
+	@Column(nullable = false)
+	private String email;
 	
-	@OneToMany(mappedBy = "messageSender", fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Message.class)
-	@JsonManagedReference(value="user-reference")
-	//@JsonIgnore
-	//@Lazy
+	@OneToMany(mappedBy = "messageSender", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@JsonIgnore
 	private List<Message> messages = new ArrayList<Message>();
 	
-	@ManyToMany(mappedBy = "users", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private Set<Project> projects = new HashSet<>();
+	@ManyToMany(mappedBy = "users", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	@JsonIgnore
+    private List<Project> projects = new ArrayList<Project>();
 	
-	public Set<Project> getProjects() {
+	public List<Project> getProjects() {
         return projects;
     }
 
-    public void addProject(Project project) {
-        projects.add(project);
-        project.getUsers().add(this);
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 	
 	public User(){}
 	
-	public User(String firstName, String lastName, Date dateOfBirth, ProfileImage profileImage, Address address) {
+	public User(String firstName, String lastName, Date dateOfBirth, 
+			//ProfileImage profileImage, 
+			String email) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.dateOfBirth = dateOfBirth;
-		this.profileImage = profileImage;
-		this.address = address;
+		//this.profileImage = profileImage;
+		this.email = email;
 	}
 	
 	public User(String username, String password, String firstName, String lastName, Date dateOfBirth,
-			ProfileImage profileImage, Address address) {
+			//ProfileImage profileImage, 
+			String email) {
 		super();
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.dateOfBirth = dateOfBirth;
-		this.profileImage = profileImage;
-		this.address = address;
+		//this.profileImage = profileImage;
+		this.email = email;
 	}
 	
 	public User(String username, String password, String firstName, String lastName, Date dateOfBirth,
-			ProfileImage profileImage, Address address, List<Message> messages) {
+			//ProfileImage profileImage, 
+			String email, List<Message> messages, List<Project> projects) {
 		
 		super();
 		this.username = username;
@@ -97,27 +96,12 @@ public class User {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.dateOfBirth = dateOfBirth;
-		this.profileImage = profileImage;
-		this.address = address;
+		//this.profileImage = profileImage;
+		this.email = email;
 		this.messages = messages;
+		this.projects = projects;
 		
 	}
-	
-//	@JsonCreator
-//	public User(@JsonProperty("messageSender") String username, String password, String firstName, String lastName, Date dateOfBirth,
-//			ProfileImage profileImage, Address address, List<Message> messages) {
-//		
-//		super();
-//		this.username = username;
-//		this.password = password;
-//		this.firstName = firstName;
-//		this.lastName = lastName;
-//		this.dateOfBirth = dateOfBirth;
-//		this.profileImage = profileImage;
-//		this.address = address;
-//		this.messages = messages;
-//		
-//	}
 
 	public String getUsername() {
 		return username;
@@ -159,20 +143,20 @@ public class User {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public ProfileImage getProfileImage() {
-		return profileImage;
+//	public ProfileImage getProfileImage() {
+//		return profileImage;
+//	}
+//
+//	public void setProfileImage(ProfileImage profileImage) {
+//		this.profileImage = profileImage;
+//	}
+
+	public String getEmail() {
+		return email;
 	}
 
-	public void setProfileImage(ProfileImage profileImage) {
-		this.profileImage = profileImage;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setAddress(String email) {
+		this.email = email;
 	}
 
 	public List<Message> getMessages() {
