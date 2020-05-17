@@ -1,8 +1,6 @@
-# SPMR
+# Projectio
 
-## Slack for Project Management and Recruitment (Name TBD)
-
-SPMR is built with Spring Boot and Angular2. It uses Hibernate and Spring Data for data access operations. Hosted with AWS EC2, Postgres RDS and S3 Storage.
+Projectio is built with Spring Boot and Angular2. It uses Hibernate and Spring Data for data access operations. Hosted with AWS EC2, Postgres RDS and S3 Storage.
 
 Run on localhost with the following steps:
 
